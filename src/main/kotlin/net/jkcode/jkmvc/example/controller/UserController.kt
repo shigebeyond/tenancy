@@ -56,7 +56,7 @@ class UserController : ISaasController() {
             val user = UserModel()
             user.fromRequest(req)
             user.create();
-            redirect("user/index");
+            tenantRedirect("user/index");
             return
         }
 
@@ -79,7 +79,7 @@ class UserController : ISaasController() {
         if (req.isPost) { // 保存
             user.fromRequest(req)
             user.update()
-            redirect("user/index");
+            tenantRedirect("user/index");
             return
         }
         val view = view()
@@ -102,7 +102,7 @@ class UserController : ISaasController() {
         // 删除 | delete user
         user.delete();
         // 重定向到列表页 | redirect to list page
-        redirect("user/index");
+        tenantRedirect("user/index");
     }
 
     /**
@@ -125,7 +125,7 @@ class UserController : ISaasController() {
             user.update()
         }
 
-        redirect("user/detail/$id");
+        tenantRedirect("user/detail/$id");
     }
 
 }

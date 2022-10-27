@@ -42,7 +42,7 @@ open class SaasOrmMeta(
     override fun queryBuilder(convertingValue: Boolean, convertingColumn: Boolean, withSelect: Boolean, reused: Boolean): OrmQueryBuilder {
         val query = super.queryBuilder(convertingValue, convertingColumn, withSelect, reused)
         // 过滤租户id
-        val tenantId = TenantContext.current().id
+        val tenantId = TenantModel.current().id
         query.where("tenant_id", tenantId)
         return query
     }

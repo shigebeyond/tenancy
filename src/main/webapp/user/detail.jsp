@@ -1,7 +1,7 @@
-<%@ page language="java" import="net.jkcode.jkmvc.http.HttpRequest,net.jkcode.jkmvc.example.model.UserModel,net.jkcode.jkmvc.tenancy.TenantContext,net.jkcode.jkmvc.tenancy.TenantModel" pageEncoding="UTF-8"%>
+<%@ page language="java" import="net.jkcode.jkmvc.http.HttpRequest,net.jkcode.jkmvc.example.model.UserModel,net.jkcode.jkmvc.tenancy.TenantModel" pageEncoding="UTF-8"%>
 <%
 HttpRequest req = HttpRequest.current();
-TenantModel tenant = TenantContext.INSTANCE.current();
+TenantModel tenant = TenantModel.current();
 %>
 <!DOCTYPE html>
 <html lang="en">

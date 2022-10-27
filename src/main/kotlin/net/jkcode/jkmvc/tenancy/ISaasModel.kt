@@ -18,7 +18,7 @@ interface ISaasModel : IOrm {
      */
     override fun beforeCreate() {
         // 添加租户id
-        val tenantId = TenantContext.current().id
+        val tenantId = TenantModel.current().id
         this.set("tenantId", tenantId)
     }
 }

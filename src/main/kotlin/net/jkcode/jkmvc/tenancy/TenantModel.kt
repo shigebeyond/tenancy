@@ -11,7 +11,16 @@ import net.jkcode.jkmvc.orm.OrmMeta
 class TenantModel(id:String? = null): Orm(id) {
 
     // 伴随对象就是元数据
-    companion object m: OrmMeta(TenantModel::class, "租户模型", "tenant", "id")
+    companion object m: OrmMeta(TenantModel::class, "租户模型", "tenant", "id"){
+
+        /**
+         * 获得当前租户
+         */
+        @JvmStatic
+        fun current(): TenantModel {
+            return HttpRequest.current().getAttribute("tenant") as TenantModel
+        }
+    }
 
     // 代理属性读写
     public var id:String by property(); // 租户标识
