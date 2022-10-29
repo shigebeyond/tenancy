@@ -141,7 +141,7 @@ class UserModel(id:Int? = null): Orm(id), ISaasModel {
 ```
 
 ## demo
-本项目中包含一个[demo](tree/master/src/main/kotlin/net/jkcode/jkmvc/example)，来演示如何使用本框架来实现多租户网站
+本项目中包含一个[demo](https://github.com/shigebeyond/tenancy/tree/master/src/main/kotlin/net/jkcode/jkmvc/example)，来演示如何使用本框架来实现多租户网站
 
 1. 首页-租户列表
 http://localhost:8080/
