@@ -17,7 +17,7 @@ TenantModel tenant = TenantModel.current();
 <body>
   <div class="panel panel-default">
     <!-- Default panel contents -->
-    <div class="panel-heading">租户[<%= tenant.getId() %>]下用户列表</div>
+    <div class="panel-heading">租户[<%= tenant.getId() %>]下的用户列表</div>
     <div class="panel-body">
       <p>
         <a href="<%= tenant.buildTenantUrl("user/new/") %>" class="btn btn-warning">新建</a>

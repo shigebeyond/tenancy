@@ -96,7 +96,7 @@ open class SaasOrmMeta{
 }
 ```
 
-3. demo
+3. 例子
 
 ```
 /**
@@ -139,3 +139,20 @@ class UserModel(id:Int? = null): Orm(id), ISaasModel {
 
 }
 ```
+
+## demo
+做了一个demo，来演示如何使用本框架来实现多租户网站
+
+1. 首页-租户列表
+http://localhost:8080/
+
+![](img/all-tenant.png)
+
+2. 某个租户对应的二级域名-租户[foo]下的用户列表
+http://foo.localhost:8080/user/index
+![](img/user-of-tenant.png)
+
+通过日志，我们可以看到用户列表的查询sql是加上了租户id的过滤条件
+![](img/select-sql.png)
+
+同理，增删改查都会加上租户id的字段或条件，请自行搭建试验
