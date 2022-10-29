@@ -14,7 +14,7 @@ abstract class ISaasController : Controller() {
      *   通过 TenantModel.current() 来获得请求属性中的当前租户
      */
     override fun before() {
-        // 租户标识 = 第三级域名
+        // 租户标识 = 第二级域名
         val talentId = req.serverName.substringBefore('.')
         // 设为当前租户
         val talent = TenantModel.findByPk<TenantModel>(talentId) ?: throw Exception("未找到租户: $talentId")
