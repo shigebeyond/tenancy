@@ -141,14 +141,19 @@ class UserModel(id:Int? = null): Orm(id), ISaasModel {
 ```
 
 ## demo
-本项目中包含一个[demo](https://github.com/shigebeyond/tenancy/tree/master/src/main/kotlin/net/jkcode/jkmvc/example)，来演示如何使用本框架来实现多租户网站
+本项目中包含一个demo，来演示如何使用本框架来实现多租户网站
 
-1. 首页-租户列表
+1. 代码
+[后端代码](src/main/kotlin/net/jkcode/jkmvc/example)
+[前端代码](src/main/webapp)
+[sql](src/main/resources/example.mysql.sql)
+
+2. 首页-租户列表
 http://localhost:8080/
 
 ![](img/all-tenant.png)
 
-2. 某个租户对应的二级域名-租户[foo]下的用户列表
+3. 某个租户对应的二级域名-租户[foo]下的用户列表
 http://foo.localhost:8080/user/index
 ![](img/user-of-tenant.png)
 
