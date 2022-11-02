@@ -28,22 +28,6 @@ class TenantModel(id:String? = null): Orm(id) {
     public var name:String by property(); // 租户名
 
     /**
-     * 新建租户后置处理
-     *   如创建db
-     */
-    override fun afterCreate() {
-
-    }
-
-    /**
-     * 新建租户后置处理
-     *   如删除db
-     */
-    override fun afterDelete() {
-
-    }
-
-    /**
      * 构建租户下的url
      */
     public fun buildTenantUrl(path: String): String {

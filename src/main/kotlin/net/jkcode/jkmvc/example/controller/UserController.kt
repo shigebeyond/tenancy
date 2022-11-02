@@ -1,18 +1,40 @@
 package net.jkcode.jkmvc.example.controller
 
 import net.jkcode.jkmvc.example.model.UserModel
+import net.jkcode.jkmvc.http.controller.Controller
 import net.jkcode.jkmvc.http.fromRequest
 import net.jkcode.jkmvc.http.isPost
 import net.jkcode.jkmvc.http.isUpload
 import net.jkcode.jkmvc.orm.OrmQueryBuilder
 import net.jkcode.jkmvc.orm.isLoaded
-import net.jkcode.jkmvc.tenancy.ISaasController
+import net.jkcode.jkmvc.tenancy.TenantCache
+import net.jkcode.jkmvc.tenancy.TenantModel
+import net.jkcode.jkutil.common.dateFormat
+import net.jkcode.jkutil.common.format
 import java.util.*
 
 /**
  * 多租户下用户管理
  */
-class UserController : ISaasController() {
+class UserController : Controller() {
+
+    /**
+     * 缓存
+     */
+    val cache = TenantCache.instance("jedis")
+
+    /**
+     * 当前租户域名下的跳转
+     */
+    fun tenantRedirect(uri: String){
+        val turl = TenantModel.current().buildTenantUrl(uri)
+        redirect(turl)
+    }
+
+    override fun before() {
+        // 缓存最新访问时间
+        cache.put("visitTime", Date().format(true))
+    }
 
     /**
      * 列表页
@@ -26,7 +48,12 @@ class UserController : ISaasController() {
         // 查询所有用户 | find all users
         val users = query.findModels<UserModel>()
         // 渲染视图 | render view
-        res.renderView(view("user/index", mapOf("count" to count, "users" to users)))
+        val data = mapOf(
+                "count" to count,
+                "users" to users,
+                "visitTime" to cache.get("visitTime")
+        )
+        res.renderView(view("user/index", data))
     }
 
     /**
