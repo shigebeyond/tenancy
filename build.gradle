@@ -110,10 +110,10 @@ project(':') {
         }
 
         /*
-     * JettyServerLauncher 启动时报错: `java.lang.NoClassDefFoundError: javax/servlet/ServletRequest`
-     * 原因: gradle的 war 插件自动将 javax.servlet-api 弄成 providedCompile, 你就算在工程的build.gradle 改为 compile 也没用
-     * fix: project structure -> modules -> 选中 JettyServerLauncher 应用的工程 -> depencies -> 选中 Gradle: javax.servlet:javax.servlet-api:3.1.0 包, 将 scop 由 provided 改为 compile
-     */
+         * JettyServerLauncher 启动时报错: `java.lang.NoClassDefFoundError: javax/servlet/ServletRequest`
+         * 原因: gradle的 war 插件自动将 javax.servlet-api 弄成 providedCompile, 你就算在工程的build.gradle 改为 compile 也没用
+         * fix: project structure -> modules -> 选中 JettyServerLauncher 应用的工程 -> depencies -> 选中 Gradle: javax.servlet:javax.servlet-api:3.1.0 包, 将 scop 由 provided 改为 compile
+         */
         //compile "javax.servlet:javax.servlet-api:3.1.0"
 
         // jdbc
@@ -148,7 +148,7 @@ project(':') {
     task copyConf(type: Copy) {
         into "${buildDir}/app/conf"
         // 需要的配置文件
-        def props = ["dataSources.yaml", "log4j.properties", "auth.yaml", "session.properties", "upload.properties", "jetty.yaml"
+        def props = ["dataSources.yaml", "logback.xml", "auth.yaml", "session.properties", "upload.properties", "jetty.yaml"
                      /*"db.yaml", "orm.properties", "routes.yaml", "http.yaml", "jetty.yaml" // 工程自己就打包在目录classes */]
         // 项目 resources 目录, 来收集配置文件
         for (src in project.sourceSets.main.resources) {
