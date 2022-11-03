@@ -2,6 +2,7 @@ package net.jkcode.jkmvc.tenancy
 
 import net.jkcode.jkmvc.orm.*
 import net.jkcode.jkmvc.orm.relation.IRelation
+import net.jkcode.jkmvc.query.DbExpr
 import kotlin.reflect.KClass
 
 /**
@@ -44,7 +45,7 @@ open class SaasOrmMeta(
         val query = super.queryBuilder(convertingValue, convertingColumn, withSelect)
         // 过滤租户id
         val tenantId = TenantModel.current().id
-        query.where("tenant_id", tenantId)
+        query.where("$name.tenant_id", tenantId)
         return query
     }
 
@@ -60,10 +61,8 @@ open class SaasOrmMeta(
             relation.conditions.addQueryAction { query, lazy ->
                 // 关联查询时过滤租户id
                 val tenantId = TenantModel.current().id
-                if(lazy)
-                    query.where("tenant_id", tenantId)
-                else
-                    query.on("tenant_id", tenantId as Any, false)
+                if(!lazy) // 只处理同时联查的情况, 不处理递延联查, 因为关联模型自身queryBuilder()就会过滤租户id
+                    query.on("$name.tenant_id", tenantId as Any, false)
             }
         }
         return super.addRelation(name, relation)

@@ -11,6 +11,7 @@ import net.jkcode.jkmvc.tenancy.TenantCache
 import net.jkcode.jkmvc.tenancy.TenantModel
 import net.jkcode.jkutil.common.dateFormat
 import net.jkcode.jkutil.common.format
+import net.jkcode.jkutil.common.httpLogger
 import java.util.*
 
 /**
@@ -153,6 +154,24 @@ class UserController : Controller() {
         }
 
         tenantRedirect("user/detail/$id");
+    }
+
+    public fun addresses() {
+        val id: Int = req.getNotNull("id")
+        val user = UserModel(id)
+        if (!user.isLoaded()) {
+            res.renderHtml("用户[" + req["id"] + "]不存在")
+            return
+        }
+
+        httpLogger.debug("递延联查一对多")
+        val addresses = user.addresses
+        httpLogger.debug("递延联查一对一")
+        val home = user.home
+
+        httpLogger.debug("同时联查")
+        val user2 = UserModel.queryBuilder().with("home").with("addresses").where("user.id", id).findModel<UserModel>()
+        res.renderText("测试关联查询")
     }
 
 }
