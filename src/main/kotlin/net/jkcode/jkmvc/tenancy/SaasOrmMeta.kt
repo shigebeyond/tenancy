@@ -1,6 +1,7 @@
 package net.jkcode.jkmvc.tenancy
 
 import net.jkcode.jkmvc.orm.*
+import net.jkcode.jkmvc.orm.relation.IRelation
 import kotlin.reflect.KClass
 
 /**
@@ -39,13 +40,33 @@ open class SaasOrmMeta(
     /**
      * 查询时过滤租户id
      */
-
     override fun queryBuilder(convertingValue: Boolean, convertingColumn: Boolean, withSelect: Boolean): OrmQueryBuilder {
         val query = super.queryBuilder(convertingValue, convertingColumn, withSelect)
         // 过滤租户id
         val tenantId = TenantModel.current().id
         query.where("tenant_id", tenantId)
         return query
+    }
+
+    /**
+     * 添加关联关系
+     * @param name
+     * @param relation
+     * @return
+     */
+    public override fun addRelation(name: String, relation: IRelation): OrmMeta {
+        // 如果关联模型也是saas模型
+        if(relation.ormMeta is SaasOrmMeta){
+            relation.conditions.addQueryAction { query, lazy ->
+                // 关联查询时过滤租户id
+                val tenantId = TenantModel.current().id
+                if(lazy)
+                    query.where("tenant_id", tenantId)
+                else
+                    query.on("tenant_id", tenantId as Any, false)
+            }
+        }
+        return super.addRelation(name, relation)
     }
 
 }
