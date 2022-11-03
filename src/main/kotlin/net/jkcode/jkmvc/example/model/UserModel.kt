@@ -9,7 +9,7 @@ import net.jkcode.jkmvc.tenancy.SaasOrmMeta
  */
 class UserModel(id:Int? = null): Orm(id), ISaasModel {
 	// 伴随对象就是元数据
-	companion object m: SaasOrmMeta(UserModel::class, "用户模型", "user", "id"){}
+	companion object m: SaasOrmMeta(UserModel::class, "用户模型", "user", "id")
 
 	// 代理属性读写
 	/**

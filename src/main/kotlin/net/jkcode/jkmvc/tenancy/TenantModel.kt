@@ -11,7 +11,7 @@ import net.jkcode.jkmvc.orm.OrmMeta
 class TenantModel(id:String? = null): Orm(id) {
 
     // 伴随对象就是元数据
-    companion object m: OrmMeta(TenantModel::class, "租户模型", "tenant", "id"){
+    companion object m: OrmMeta(TenantModel::class, "租户模型", "tenant", "id", OrmCacheMeta("lru") /* 有缓存 */){
 
         /**
          * 获得当前租户
@@ -20,6 +20,19 @@ class TenantModel(id:String? = null): Orm(id) {
         fun current(): TenantModel {
             return HttpRequest.current().getAttribute("tenant") as TenantModel
         }
+
+        /**
+         * 构建当前租户下的url
+         */
+        @JvmStatic
+        @JvmOverloads
+        public fun buildRootUrl(path: String = ""): String {
+            val req = HttpRequest.current()
+            val server = req.serverName
+            val rootDomain = server.substringAfter('.')
+            return "http://$rootDomain:${req.serverPort}/$path"
+        }
+
     }
 
     // 代理属性读写

@@ -17,11 +17,12 @@ TenantModel tenant = TenantModel.current();
 <body>
   <div class="panel panel-default">
     <!-- Default panel contents -->
-    <div class="panel-heading">租户[<%= tenant.getId() %>]下的用户列表</div>
+    <div class="panel-heading">租户[<%= tenant.getId() %>]子域名下的用户列表</div>
     <div class="panel-body">
       <p class="bg-success">最新访问时间 <%= request.getAttribute("visitTime") %></p>
       <p>
         <a href="<%= tenant.buildTenantUrl("user/new/") %>" class="btn btn-warning">新建</a>
+        <a href="<%= tenant.buildRootUrl() %>" class="btn btn-danger">返回根域名</a>
       </p>
        <!-- Table -->
       <table class="table">
