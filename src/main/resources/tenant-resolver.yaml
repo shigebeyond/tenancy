@@ -1,0 +1,4 @@
+domain: net.jkcode.jkmvc.tenancy.resolver.DomainTenantResolver
+path: net.jkcode.jkmvc.tenancy.resolver.PathTenantResolver
+header: net.jkcode.jkmvc.tenancy.resolver.HeaderTenantResolver
+param: net.jkcode.jkmvc.tenancy.resolver.ParamTenantResolver

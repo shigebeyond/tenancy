@@ -1,0 +1,2 @@
+resolverType: domain # 租户解析器类型: domain/path/parameter/header
+resolverParameterName: tenant # 解析器用到的参数名, 仅用于 path/parameter/header 类型的解析器

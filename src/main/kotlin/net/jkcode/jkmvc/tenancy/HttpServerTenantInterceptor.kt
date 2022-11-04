@@ -3,6 +3,7 @@ package net.jkcode.jkmvc.tenancy
 import net.jkcode.jkutil.common.trySupplierFuture
 import net.jkcode.jkmvc.http.HttpRequest
 import net.jkcode.jkmvc.http.IHttpRequestInterceptor
+import net.jkcode.jkmvc.tenancy.resolver.ITenantResolver
 import org.slf4j.MDC
 import java.util.concurrent.CompletableFuture
 
@@ -14,6 +15,11 @@ import java.util.concurrent.CompletableFuture
  * @date 2022-10-08 2:53 PM
  */
 class HttpServerTenantInterceptor: IHttpRequestInterceptor {
+
+    /**
+     * 租户解析器
+     */
+    protected val resolver = ITenantResolver.instance(ITenantResolver.config["resolverType"]!!)
 
     /**
      * 前置处理
@@ -29,20 +35,16 @@ class HttpServerTenantInterceptor: IHttpRequestInterceptor {
      */
     public override fun intercept(req: HttpRequest, action: () -> Any?): CompletableFuture<Any?> {
         // 1 前置处理
-        // 租户标识 = 第二级域名
-        val parts = req.serverName.split('.', limit = 2)
-        val hasTenantId = parts.size > 1
-        if(hasTenantId) {
-            val tenantId = parts[0]
+        val tenant = resolver.resolveTenant(req)
+        if(tenant != null) {
             // 1.1 设为当前租户
-            val tenant = TenantModel.findByPk<TenantModel>(tenantId) ?: throw Exception("未找到租户: $tenantId")
             req.setAttribute("tenant", tenant)
 
             // 1.2 添加日志变量
-            MDC.put("tenant", tenantId)
+            MDC.put("tenant", tenant.id)
 
             // 1.3 修改上传子目录
-            req.uploadSubDir = tenantId
+            req.uploadSubDir = tenant.id
         }
 
         // 2 转future
@@ -51,7 +53,7 @@ class HttpServerTenantInterceptor: IHttpRequestInterceptor {
         // 3 后置处理
         return future.whenComplete{ r, ex ->
             // 清楚日志变量
-            if(hasTenantId)
+            if(tenant != null)
                 MDC.remove("tenant")
         }
     }
