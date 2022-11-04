@@ -1,6 +1,6 @@
 [GitHub](https://github.com/shigebeyond/tenancy) | [Gitee](https://gitee.com/shigebeyond/tenancy) 
 
-基于 [jkmvc](https://github.com/shigebeyond/jkmvc) 框架的多租户实现，主要包含租户识别、日志隔离、db隔离、缓存隔离、文件系统隔离等功能，还有一个web demo项目。
+基于 [jkmvc](https://github.com/shigebeyond/jkmvc) 框架的多租户实现，主要包含租户识别、日志隔离、db隔离、缓存隔离、文件系统隔离、分库等功能，还有一个web demo项目。
 
 - 注: 依赖最新的jkmvc框架
 
@@ -82,20 +82,30 @@ cache.get("visitTime")
 
 ![](img/upload.png)
 
-## 6 demo
+## 6 分库的实现
+db隔离中我们采用第三种隔离方式：同一数据库，同一张表，通过字段（租户id）来区分；
+
+但随着租户多起来，租户的数据多起来，必然会引入多db，这就引申出怎么将不同的租户数据分配到不同的db中？当然为了保证一致性，一个租户的数据还是放到同一个db;
+
+本框架的实现方式:
+1. 修改配置: [tenant.yaml](src/main/resources/tenant.yaml) 中的配置项`dynDb`
+2. 自行实现方法: [ITenant.dynDbName()](src/main/kotlin/net/jkcode/jkmvc/tenancy/ITenant.kt)；
+关于实现方式，如按租户id首字母范围分3段对应3个db, 如hash(租户id)%3 ...根据具体业务与设计来定。
+
+## 7 demo
 本项目中包含一个demo，来演示如何使用本框架来实现多租户网站
 
-### 6.1 代码
+### 7.1 代码
 [后端代码](src/main/kotlin/net/jkcode/jkmvc/example)
 [前端代码](src/main/webapp)
 [sql](src/main/resources/example.mysql.sql)
 
-### 6.2 首页-租户列表
+### 7.2 首页-租户列表
 http://localhost:8080/
 
 ![](img/all-tenant.png)
 
-### 6.3 某个租户对应的二级域名-租户[foo]下的用户列表
+### 7.3 某个租户对应的二级域名-租户[foo]下的用户列表
 http://foo.localhost:8080/user/index
 ![](img/user-of-tenant.png)
 

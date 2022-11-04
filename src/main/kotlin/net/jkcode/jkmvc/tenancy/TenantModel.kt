@@ -1,5 +1,6 @@
 package net.jkcode.jkmvc.tenancy
 
+import net.jkcode.jkmvc.db.IDb
 import net.jkcode.jkmvc.http.HttpRequest
 import net.jkcode.jkmvc.orm.Orm
 import net.jkcode.jkmvc.orm.OrmCacheMeta
@@ -8,7 +9,7 @@ import net.jkcode.jkmvc.orm.OrmMeta
 /**
  * 租户模型
  */
-class TenantModel(id:String? = null): Orm(id) {
+class TenantModel(id:String? = null): Orm(id), ITenant {
 
     // 伴随对象就是元数据
     companion object m: OrmMeta(TenantModel::class, "租户模型", "tenant", "id", OrmCacheMeta("lru") /* 有缓存 */){
@@ -36,17 +37,18 @@ class TenantModel(id:String? = null): Orm(id) {
     }
 
     // 代理属性读写
-    public var id:String by property(); // 租户标识
+    override var id:String by property(); // 租户标识
 
-    public var name:String by property(); // 租户名
+    override var name:String by property(); // 租户名
 
     /**
      * 构建租户下的url
      */
-    public fun buildTenantUrl(path: String): String {
+    override fun buildTenantUrl(path: String): String {
         val req = HttpRequest.current()
         val server = req.serverName
         val rootDomain = server.substringAfter('.')
         return "http://${this.id}.$rootDomain:${req.serverPort}/$path"
     }
+
 }

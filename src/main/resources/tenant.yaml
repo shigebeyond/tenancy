@@ -7,3 +7,5 @@
 resolverType: domain
 # 解析器用到的参数名, 仅用于 path/parameter/header/session 类型的解析器
 resolverParameterName: tenant
+# 是否使用动态db, 即不同租户使用不同db, 详见 ITenant.dynDbName() 实现
+dynDb: false

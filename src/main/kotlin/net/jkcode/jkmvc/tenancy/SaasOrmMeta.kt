@@ -1,8 +1,12 @@
 package net.jkcode.jkmvc.tenancy
 
+import net.jkcode.jkmvc.db.Db
+import net.jkcode.jkmvc.db.IDb
 import net.jkcode.jkmvc.orm.*
 import net.jkcode.jkmvc.orm.relation.IRelation
 import net.jkcode.jkmvc.query.DbExpr
+import net.jkcode.jkutil.common.Config
+import net.jkcode.jkutil.common.IConfig
 import kotlin.reflect.KClass
 
 /**
@@ -33,10 +37,46 @@ open class SaasOrmMeta(
             checkingTablePrimaryKey: Boolean = true // 是否检查表与主键是否存在
     ) : this(model, label, table, DbKeyNames(primaryKey), cacheMeta, dbName, pkEmptyRule, checkingTablePrimaryKey)
 
+    companion object{
+        /**
+         * 租户应用的配置
+         */
+        public val config: IConfig = Config.instance("tenant", "yaml")
+
+        /**
+         * 是否使用动态db, 即不同租户使用不同db, 详见 ITenant.dynDbName() 实现
+         */
+        public val dynDb: Boolean = config["dynDb"]!!
+    }
+
     /**
      * 简化实现, 对常规查询不预编译sql
      */
     override val precompileSql: Boolean = false
+
+    /**
+     * 兼容多租户的动态db
+     */
+    override val db: IDb
+        get(){
+            var dbName2: String
+            if(dynDb) // 动态db
+                dbName2 = TenantModel.current().dynDbName()
+            else // 静态db
+                dbName2 = this.dbName
+            return Db.instance(dbName2)
+        }
+
+    /**
+     * 获得缓存的key
+     *   加上租户id作为后缀
+     * @param pk
+     * @return
+     */
+    protected override fun getCacheKey(pk: DbKeyValues): String {
+        val tenantId = TenantModel.current().id
+        return pk.columns.joinToString("_", "orm:$dbName:$name:$tenantId")
+    }
 
     /**
      * 查询时过滤租户id
