@@ -1,6 +1,6 @@
 [GitHub](https://github.com/shigebeyond/tenancy) | [Gitee](https://gitee.com/shigebeyond/tenancy) 
 
-基于 [jkmvc](https://github.com/shigebeyond/jkmvc) 框架的多租户实现
+基于 [jkmvc](https://github.com/shigebeyond/jkmvc) 框架的多租户实现，主要包含租户识别、日志隔离、db隔离、缓存隔离、文件系统隔离等
 
 - 注: 依赖最新的jkmvc框架
 
