@@ -3,7 +3,7 @@ buildscript {
     repositories {
         mavenLocal()
         maven {
-            url 'http://maven.aliyun.com/nexus/content/repositories/snapshots'
+            url 'https://maven.aliyun.com/repository/public/'
         }
         jcenter()
         mavenCentral()
@@ -56,7 +56,7 @@ allprojects{
     repositories {
         mavenLocal()
         maven {
-            url 'http://maven.aliyun.com/nexus/content/repositories/snapshots'
+            url 'https://maven.aliyun.com/repository/public/'
         }
         maven { // jphp
             url "https://jitpack.io"
